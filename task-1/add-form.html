@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>NTI Task 1</title>
+		<!-- CSS only -->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+			crossorigin="anonymous"
+		/>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row justify-content-center py-5">
+				<div class="col-md-6">
+					<form id="add-form">
+						<div class="mb-3">
+							<label for="cardNumber" class="form-label">Card Number</label>
+							<input class="form-control" id="cardNumber" />
+						</div>
+						<div class="mb-3">
+							<label for="cardTitle" class="form-label">Card Name</label>
+							<input class="form-control" id="cardTitle" />
+						</div>
+
+						<button type="submit" class="btn btn-primary">Add Card</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row text-center" id="cardsContainer"></div>
+		</div>
+
+		<script>
+			let addForm = document.getElementById("add-form");
+			let cardNumber = addForm.querySelector("#cardNumber");
+			let cardTitle = addForm.querySelector("#cardTitle");
+			let cardsContainer = document.getElementById("cardsContainer");
+
+			addForm.addEventListener("submit", function (e) {
+				let cardNumberVal = cardNumber.value;
+				let cardTitleVal = cardTitle.value;
+				console.log(cardNumberVal);
+				console.log(cardTitleVal);
+				e.preventDefault();
+				if (!validateInput(cardNumberVal, cardTitleVal)) return;
+				addCard(cardNumberVal, cardTitleVal);
+			});
+
+			function validateInput(cardNumberVal, cardTitleVal) {
+				let isValid = true;
+				if (!/^\d+$/.test(cardNumberVal)) {
+					isValid = false;
+					alert("Enter a valid number");
+				}
+				if (!cardTitleVal) {
+					isValid = false;
+					alert("Enter card name");
+				}
+				return isValid;
+			}
+
+			function addCard(cardNumberVal, cardTitleVal) {
+				cardsContainer.innerHTML += `<div class="card my-2 mx-auto" style="width: 18rem">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${cardNumberVal}</h5>
+                                                <p class="card-text text-primary">${cardTitleVal}</p>
+                                                <input type="button" class="btn btn-outline-danger float-end" value="Delete" onclick="deleteCard(event)"/>
+                                            </div>
+                                        </div>`;
+			}
+
+			function deleteCard(e) {
+				console.log(e);
+				// e.target.parentElement.parentElement.remove();
+				e.target.parentElement.parentElement.style.visibility = "hidden";
+			}
+		</script>
+	</body>
+</html>

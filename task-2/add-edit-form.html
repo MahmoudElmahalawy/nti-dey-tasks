@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>NTI Task 1</title>
+		<!-- CSS only -->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+			crossorigin="anonymous"
+		/>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row justify-content-center py-5">
+				<div class="col-md-6">
+					<form id="add-form">
+						<div class="mb-3">
+							<label for="cardNumber" class="form-label">Card Number</label>
+							<input class="form-control" id="cardNumber" />
+						</div>
+						<div class="mb-3">
+							<label for="cardTitle" class="form-label">Card Name</label>
+							<input class="form-control" id="cardTitle" />
+						</div>
+
+						<button type="submit" class="btn btn-primary" id="formAddBtn">Add Card</button>
+						<button type="button" class="btn btn-success d-none" id="formEditBtn">Edit Card</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row text-center" id="cardsContainer"></div>
+		</div>
+
+		<script>
+			let cardForm = document.getElementById("add-form");
+			let formAddBtn = document.querySelector("#formAddBtn");
+			let formEditBtn = document.querySelector("#formEditBtn");
+			let cardNumber = cardForm.querySelector("#cardNumber");
+			let cardTitle = cardForm.querySelector("#cardTitle");
+			let cardsContainer = document.getElementById("cardsContainer");
+			let currentCard = null;
+
+			window.addEventListener("load", showCards);
+
+			cardForm.addEventListener("submit", function (e) {
+				e.preventDefault();
+				let cardNumberVal = cardNumber.value;
+				let cardTitleVal = cardTitle.value;
+
+				if (!validateInput(cardNumberVal, cardTitleVal)) return;
+				addCard(cardNumberVal, cardTitleVal);
+				showCards();
+
+				cardForm.reset();
+			});
+
+			formEditBtn.addEventListener("click", function (e) {
+				if (!currentCard) return;
+				let cards = getCardsArr();
+
+				let currentCardIndex = cards.findIndex((card) => card.id == currentCard);
+				// console.log(currentCardIndex);
+				cards[currentCardIndex].cardNumber = cardNumber.value;
+				cards[currentCardIndex].cardTitle = cardTitle.value;
+
+				setCardsArr(cards);
+				showCards();
+
+				formAddBtn.removeAttribute("disabled");
+				formEditBtn.classList.add("d-none");
+
+				cardForm.reset();
+			});
+
+			function validateInput(cardNumberVal, cardTitleVal) {
+				let isValid = true;
+
+				if (!/^\d+$/.test(cardNumberVal)) {
+					isValid = false;
+					alert("Enter a valid number");
+				}
+				if (!cardTitleVal) {
+					isValid = false;
+					alert("Enter card name");
+				}
+				return isValid;
+			}
+
+			function getCardsArr() {
+				let cardsArr = JSON.parse(localStorage.getItem("cards")) || [];
+				return cardsArr;
+			}
+
+			function setCardsArr(cards) {
+				localStorage.setItem("cards", JSON.stringify(cards));
+			}
+
+			function showCards() {
+				cardsContainer.innerHTML = "";
+				let cards = getCardsArr();
+
+				if (!cards.length) {
+					return (cardsContainer.innerHTML = `<div class="alert alert-danger">No cards to show</div>`);
+				}
+				cards.forEach((card) => {
+					cardsContainer.innerHTML += `
+						<div class="card my-2 mx-auto" style="width: 18rem" data-id="${card.id}">
+							<div class="card-body">
+								<h5 class="card-title">${card.cardNumber}</h5>
+								<p class="card-text text-primary">${card.cardTitle}</p>
+								<input type="button" class="btn btn-outline-success float-end ms-2" value="Edit" onclick="editCard(event)" />
+								<input type="button" class="btn btn-outline-danger float-end" value="Delete" onclick="deleteCard(event)" />
+							</div>
+						</div>
+						`;
+				});
+			}
+
+			function addCard(cardNumberVal, cardTitleVal) {
+				let cards = getCardsArr();
+
+				cards.push({ id: new Date().getTime(), cardNumber: cardNumberVal, cardTitle: cardTitleVal });
+				setCardsArr(cards);
+			}
+
+			function getCardIndex(e) {
+				let cards = getCardsArr();
+				let cardId = e.target.parentElement.parentElement.dataset.id;
+
+				if (!cards.length) return;
+				return cards.findIndex((card) => card.id == cardId);
+			}
+
+			function deleteCard(e) {
+				let cards = getCardsArr();
+				let cardIndex = getCardIndex(e);
+
+				console.log(cardIndex);
+
+				cards.splice(cardIndex, 1);
+				setCardsArr(cards);
+				showCards();
+			}
+
+			function editCard(e) {
+				let cards = getCardsArr();
+				let cardIndex = getCardIndex(e);
+				let selectedCard = cards[cardIndex];
+
+				currentCard = selectedCard.id;
+
+				cardNumber.value = selectedCard.cardNumber;
+				cardTitle.value = selectedCard.cardTitle;
+
+				formAddBtn.setAttribute("disabled", true);
+				formEditBtn.classList.remove("d-none");
+			}
+		</script>
+	</body>
+</html>
