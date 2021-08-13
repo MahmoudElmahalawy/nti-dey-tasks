@@ -1,0 +1,8 @@
+[
+	{ "id": 2, "name": "client2 name", "balance": 6300, "isSuspended": false },
+	{ "id": 3, "name": "client3 name", "balance": 19650, "isSuspended": true },
+	{ "id": 4, "name": "client4 name", "balance": 200, "isSuspended": false },
+	{ "id": 5, "name": "John", "balance": 7200, "isSuspended": true },
+	{ "id": 6, "name": "Smith", "balance": 3000, "isSuspended": false },
+	{ "id": 7, "name": "Michael", "balance": 35000, "isSuspended": false }
+]
