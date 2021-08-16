@@ -1,0 +1,15 @@
+{{> _header}}
+{{> _navbar headline=title}}
+
+<div class="container my-5">
+	<form class="w-50 mx-auto" method="POST" action="/{{formAction}}">
+		<div class="mb-3">
+			<label for="withdrawalAmount" class="form-label">{{clientName}}</label>
+			<input name="withdrawalAmount" type="number" class="form-control" id="withdrawalAmount" />
+		</div>
+
+		<button type="submit" class="btn btn-primary">{{btnAction}}</button>
+	</form>
+</div>
+
+{{> _footer}}                          

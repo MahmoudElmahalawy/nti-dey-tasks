@@ -1,0 +1,18 @@
+<div class="container my-5">
+	<form class="w-50 mx-auto" method="POST" action="/{{formAction}}">
+		<div class="mb-3">
+			<label for="clientName" class="form-label">Name</label>
+			<input name="name" type="text" class="form-control" id="clientName" />
+		</div>
+		<div class="mb-3">
+			<label for="clientBalance" class="form-label">Balance</label>
+			<input name="balance" type="number" class="form-control" id="clientBalance" min="1000" />
+		</div>
+		<div class="mb-3 form-check">
+			<input name="isSuspended" type="checkbox" class="form-check-input" id="suspendCheck" value="true" />
+			<label class="form-check-label" for="suspendCheck">Suspended</label>
+		</div>
+
+		<button type="submit" class="btn btn-primary">{{btnAction}}</button>
+	</form>
+</div>

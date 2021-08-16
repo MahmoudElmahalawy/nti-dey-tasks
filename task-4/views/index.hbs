@@ -1,0 +1,32 @@
+{{> _header}}
+{{> _navbar headline=title}}
+
+<div class="container my-5">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Balance</th>
+                <th scope="col">Suspended</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each clientsList}}
+            <tr>
+                <th scope="row">{{this.name}}</th>
+                <td>{{this.balance}}</td>
+                <td>{{#if this.isSuspended}}YES{{else}}NO{{/if}}</td>
+                <td>
+                    <a class="btn btn-primary" href="/deposit/{{this.id}}">Deposit</a>
+                    <a class="btn btn-outline-primary" href="/withdraw/{{this.id}}">Withdraw</a>
+                    <a class="btn btn-outline-success" href="/edit/{{this.id}}">Edit</a>
+                    <a class="btn btn-danger" href="/delete/{{this.id}}">Delete</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+{{> _footer}}
